@@ -355,6 +355,12 @@ const T = {
   risk_detail: { zh: '风险明细', en: 'Risk Details' },
   high_severity_alerts: { zh: '高风险预警', en: 'High Severity Alerts' },
   sector_scorecard: { zh: '板块评分卡', en: 'Sector Scorecard' },
+  footnote_monthly_return: { zh: '近30天 | 数据截至 2026-07-25 | Wisesheets API', en: 'Past 30 Days | Data as of 2026-07-25 | Wisesheets API' },
+  footnote_wow: { zh: '本周(07/21-07/25) vs 上周(07/14-07/18) | 数据截至 2026-07-25', en: 'This Week (07/21-07/25) vs Last Week (07/14-07/18) | Data as of 2026-07-25' },
+  footnote_quadrant: { zh: 'X轴=6月相对强弱, Y轴=周环比动量 | 数据截至 2026-07-25', en: 'X=6M Relative Strength, Y=WoW Momentum | Data as of 2026-07-25' },
+  footnote_sparkline: { zh: '近5个交易日走势', en: 'Past 5 Trading Days' },
+  footnote_scorecard: { zh: '收益数据: 1M=近30天, 6M=近180天 | 截至 2026-07-25', en: 'Return Data: 1M=Past 30 Days, 6M=Past 180 Days | As of 2026-07-25' },
+  footnote_risk_heatmap: { zh: '风险基于截至 2026-07-25 的持仓数据计算', en: 'Risk calculated based on position data as of 2026-07-25' },
 };
 
 function t(key) {
@@ -490,10 +496,10 @@ function renderOverview() {
       '<div class="kpi-card"><div class="kpi-icon">📈</div><div class="kpi-value">' + summary.leading_sectors + ' <span style="color:var(--text-muted);font-size:14px">vs</span> ' + summary.lagging_sectors + '</div><div class="kpi-label">' + t('leading_vs_lagging') + '</div></div>' +
     '</div>' +
     '<div class="chart-row">' +
-      '<div class="chart-container"><h3>' + t('monthly_return_rank') + '</h3><canvas id="monthlyReturnChart"></canvas></div>' +
-      '<div class="chart-container"><h3>' + t('wow_comparison') + '</h3><canvas id="wowChart"></canvas></div>' +
+      '<div class="chart-container"><h3>' + t('monthly_return_rank') + '</h3><canvas id="monthlyReturnChart"></canvas><div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_monthly_return') + '</div></div>' +
+      '<div class="chart-container"><h3>' + t('wow_comparison') + '</h3><canvas id="wowChart"></canvas><div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_wow') + '</div></div>' +
     '</div>' +
-    '<div class="quadrant-matrix"><h3>' + t('quadrant_matrix') + '</h3><canvas id="quadrantCanvas" height="420"></canvas></div>';
+    '<div class="quadrant-matrix"><h3>' + t('quadrant_matrix') + '</h3><canvas id="quadrantCanvas" height="420"></canvas><div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_quadrant') + '</div></div>';
 }
 
 function initOverviewCharts() {
@@ -602,11 +608,11 @@ function initQuadrantCanvas(canvasId) {
 
   ctx.fillStyle = '#94a3b8';
   ctx.font = '11px sans-serif';
-  ctx.fillText(t('relative_strength') + ' →', pad + cw - 80, pad + ch + 30);
+  ctx.fillText('6M ' + t('relative_strength') + ' →', pad + cw - 80, pad + ch + 30);
   ctx.save();
   ctx.translate(14, pad + ch/2);
   ctx.rotate(-Math.PI/2);
-  ctx.fillText('↑ ' + t('momentum_change'), 0, 0);
+  ctx.fillText('↑ WoW ' + t('momentum_change'), 0, 0);
   ctx.restore();
 
   allSectors.forEach(function(s) {
@@ -688,9 +694,10 @@ function renderRotation() {
   });
 
   return dataTimestamp() +
-    '<div class="quadrant-matrix"><h3>' + t('quadrant_matrix') + '</h3><canvas id="rotationQuadrantCanvas" height="420"></canvas></div>' +
+    '<div class="quadrant-matrix"><h3>' + t('quadrant_matrix') + '</h3><canvas id="rotationQuadrantCanvas" height="420"></canvas><div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_quadrant') + '</div></div>' +
     '<h3 style="font-size:14px;color:var(--text-secondary);margin-bottom:12px">' + t('sector_scorecard') + '</h3>' +
-    '<div class="sector-score-grid">' + scoreCards + '</div>';
+    '<div class="sector-score-grid">' + scoreCards + '</div>' +
+    '<div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_scorecard') + '</div>';
 }
 
 function initRotationCharts() { initQuadrantCanvas('rotationQuadrantCanvas'); }
@@ -815,7 +822,7 @@ function renderRisk() {
     '<div class="kpi-grid">' + kpiHtml + '</div>' +
     '<div class="chart-container"><h3>' + t('risk_heatmap') + '</h3>' +
       '<div style="display:grid;grid-template-columns:140px repeat(5,1fr);gap:2px;margin-bottom:4px"><div></div>' + riskTypeHeaders + '</div>' +
-      heatmapRows + '</div>' +
+      heatmapRows + '<div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_risk_heatmap') + '</div></div>' +
     '<div class="chart-row"><div class="chart-container"><h3>' + t('risk_radar') + '</h3><canvas id="riskRadarChart"></canvas></div><div></div></div>' +
     '<div class="chart-container"><h3>' + t('risk_detail') + '</h3><div class="table-wrapper" style="max-height:40vh"><table class="data-table"><thead><tr>' +
       '<th>' + t('ticker') + '</th><th>' + t('sector') + '</th><th>' + t('risk_type') + '</th><th>' + t('detail') + '</th><th>' + t('severity') + '</th>' +
@@ -1018,6 +1025,7 @@ function showStockModal(ticker) {
   document.getElementById('modalContent').innerHTML =
     '<div class="modal-header"><h3>' + ticker + ' - ' + name + '</h3><button class="modal-close" onclick="closeModal()">&times;</button></div>' +
     '<canvas class="sparkline-canvas" id="sparklineCanvas"></canvas>' +
+    '<div style="font-size:10px;color:#64748b;text-align:center;margin-top:2px">' + t('footnote_sparkline') + ' | 07/21 - 07/25</div>' +
     '<div class="modal-grid">' +
       '<div class="modal-field"><div class="label">' + t('sector') + '</div><div class="value">' + sectorName(sector || {sector_en: stock.sector_en, sector_zh: stock.sector_zh}) + '</div></div>' +
       '<div class="modal-field"><div class="label">' + t('close') + '</div><div class="value">$' + stock.close.toFixed(2) + '</div></div>' +
