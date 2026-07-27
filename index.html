@@ -496,8 +496,8 @@ function renderOverview() {
       '<div class="kpi-card"><div class="kpi-icon">📈</div><div class="kpi-value">' + summary.leading_sectors + ' <span style="color:var(--text-muted);font-size:14px">vs</span> ' + summary.lagging_sectors + '</div><div class="kpi-label">' + t('leading_vs_lagging') + '</div></div>' +
     '</div>' +
     '<div class="chart-row">' +
-      '<div class="chart-container"><h3>' + t('monthly_return_rank') + '</h3><canvas id="monthlyReturnChart"></canvas><div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_monthly_return') + '</div></div>' +
-      '<div class="chart-container"><h3>' + t('wow_comparison') + '</h3><canvas id="wowChart"></canvas><div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_wow') + '</div></div>' +
+      '<div class="chart-container"><h3>' + t('monthly_return_rank') + '</h3><canvas id="monthlyReturnChart" height="450"></canvas><div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_monthly_return') + '</div></div>' +
+      '<div class="chart-container"><h3>' + t('wow_comparison') + '</h3><canvas id="wowChart" height="450"></canvas><div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_wow') + '</div></div>' +
     '</div>' +
     '<div class="quadrant-matrix"><h3>' + t('quadrant_matrix') + '</h3><canvas id="quadrantCanvas" height="420"></canvas><div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">' + t('footnote_quadrant') + '</div></div>';
 }
@@ -523,7 +523,7 @@ function initMonthlyReturnChart() {
       }]
     },
     options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y', responsive: true, maintainAspectRatio: true, aspectRatio: 2.2,
       plugins: { legend: { display: false } },
       scales: {
         x: { grid: { color: '#2d374833' }, ticks: { color: '#94a3b8', callback: function(v) { return v + '%'; } } },
@@ -547,7 +547,7 @@ function initWowChart() {
       ]
     },
     options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y', responsive: true, maintainAspectRatio: true, aspectRatio: 2.2,
       plugins: { legend: { display: true, labels: { color: '#94a3b8', font: { size: 10 } } } },
       scales: {
         x: { grid: { color: '#2d374833' }, ticks: { color: '#94a3b8', callback: function(v) { return v + '%'; } } },
