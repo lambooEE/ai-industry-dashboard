@@ -409,10 +409,20 @@ function renderAll() {
 }
 
 function renderNavbar() {
+  // US market hours in Eastern Time (auto-handles EDT/EST)
   const now = new Date();
-  const isWeekday = now.getDay() >= 1 && now.getDay() <= 5;
-  const hour = now.getHours();
-  const marketOpen = isWeekday && hour >= 9 && hour < 16;
+  const etStr = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York', hour12: false,
+    weekday: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit'
+  }).format(now);
+  const etMatch = etStr.match(/(\w+),\s*(\d{2}):(\d{2}):(\d{2})/);
+  const etDay = etMatch[1];
+  const etH = parseInt(etMatch[2]);
+  const etM = parseInt(etMatch[3]);
+  const etTime = etH * 60 + etM;
+  const etIsWeekday = ['Mon','Tue','Wed','Thu','Fri'].indexOf(etDay) !== -1;
+  // NYSE: 9:30 AM - 4:00 PM ET
+  const marketOpen = etIsWeekday && etTime >= 570 && etTime < 960;
   document.getElementById('marketDot').className = 'freshness-dot ' + (marketOpen ? 'green' : 'red');
   document.getElementById('marketStatus').textContent = marketOpen ? 'Market Open' : 'Market Closed';
   document.getElementById('navDate').textContent = reportDate + ' | Wisesheets API';
